@@ -1,9 +1,9 @@
 node-jslint
 ===========
 
-Easily use [jslint][] from the command line. Pass it the JS file you'd like to lint. For example:
+Easily use [jslint][] from the command line. Pass it the JS file(s) you'd like to lint. For example:
 
-    jslint foo.js
+    jslint foo.js bar.js
 
 It assumes [nodejs][] globals and tolerates shebangs.
 
