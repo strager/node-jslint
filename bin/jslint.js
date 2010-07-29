@@ -70,4 +70,4 @@
 
     process.exit(exit_code);
 
-}(Array.prototype.slice.call(process.argv, 2)));
+}(process.argv.slice(2)));
