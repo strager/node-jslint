@@ -4,8 +4,10 @@
 // Shebang removal regex uses insecure "."
 // JSLINT is provided by fulljslint.js modified to export the global
 
-(function (file) {
+(function (files) {
     var e, i, input, len, e_num,
+        batch = (files.length > 1),
+        exit_code = 0,
         sys = require("sys"),
         fs = require("fs"),
         jslint = require("../lib/fulljslint_export").JSLINT,
@@ -28,38 +30,44 @@
             ]
         };
 
-    if (!file) {
-        sys.puts("Usage: jslint file.js");
+    if (!files.length) {
+        sys.puts("Usage: jslint file.js [file2.js]");
         process.exit(1);
     }
 
-    try {
-        input = fs.readFileSync(file, "utf8");
-    } catch (err) {
-        sys.puts("jslint: Couldn't open file '" + file + "'.");
-        process.exit(1);
-    }
+    files.forEach(function(file) {
+        try {
+            input = fs.readFileSync(file, "utf8");
+        } catch (err) {
+            sys.puts("ERROR: Couldn't open file '" + file + "'.");
+            exit_code += 1;
+            return;
+        }
 
-    // remove shebang (lifted from node.js)
-    input = input.replace(/^\#\!.*/, "");
+        // remove shebang (lifted from node.js)
+        input = input.replace(/^\#\!.*/, "");
 
-    if (!jslint(input, jslint_options)) {
-        i = 0;
-        len = jslint.errors.length;
-        for (i=0; i<len; i++) {
-            e = jslint.errors[i];
-            if (e) {
-                e_num = (i + 1) + " ";
-                while (e_num.length < 4) {
-                    e_num = " " + e_num;
+        if (jslint(input, jslint_options)) {
+            sys.puts("OK" + (batch ? ": " + file : ""));
+        } else {
+            if (batch) { sys.puts("FAIL: " + file); }
+            exit_code += 1;
+            i = 0;
+            len = jslint.errors.length;
+            for (i=0; i<len; i++) {
+                e = jslint.errors[i];
+                if (e) {
+                    e_num = (i + 1) + " ";
+                    while (e_num.length < 4) {
+                        e_num = " " + e_num;
+                    }
+                    sys.puts(e_num + e.line + "," + e.character + ": " + e.reason);
+                    sys.puts("    " + (e.evidence || "").replace(/^\s+|\s+$/, ""));
                 }
-                sys.puts(e_num + e.line + "," + e.character + ": " + e.reason);
-                sys.puts("    " + (e.evidence || "").replace(/^\s+|\s+$/, ""));
             }
         }
-        process.exit(2);
-    }
+    });
 
-    sys.puts("OK");
+    process.exit(exit_code);
 
-}(process.argv[2]));
+}(Array.prototype.slice.call(process.argv, 2)));
