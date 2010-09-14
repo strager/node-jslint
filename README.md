@@ -17,13 +17,11 @@ You'll need [nodejs][] and [npm][], which is easy to install on OS X with [homeb
 
 Then install:
 
-    npm install http://github.com/reid/node-jslint/tarball/master
+    npm install jslint
 
 You may also clone this repository then install in your working copy:
 
     npm install .
-
-This package isn't yet in the npm registry. I'm working on it.
 
 License
 -------
