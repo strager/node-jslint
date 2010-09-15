@@ -47,10 +47,7 @@
         // remove shebang (lifted from node.js)
         input = input.replace(/^\#\!.*/, "");
 
-        if (jslint(input, jslint_options)) {
-            sys.puts("OK" + (batch ? ": " + file : ""));
-        } else {
-            if (batch) { sys.puts("FAIL: " + file); }
+        if (!jslint(input, jslint_options)) {
             exit_code += 1;
             i = 0;
             len = jslint.errors.length;
@@ -61,7 +58,7 @@
                     while (e_num.length < 4) {
                         e_num = " " + e_num;
                     }
-                    sys.puts(e_num + e.line + "," + e.character + ": " + e.reason);
+                    sys.puts(file + ":" + (e.line + 1) + ":" + (e.character + 1) + ":" + e.reason);
                     sys.puts("    " + (e.evidence || "").replace(/^\s+|\s+$/, ""));
                 }
             }
