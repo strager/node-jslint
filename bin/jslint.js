@@ -93,7 +93,7 @@ var jslint_options = getConfig(args);
 var files = args.files;
 
 if (!files.length) {
-    sys.puts("Usage: jslint file.js [more inputs...]");
+    sys.puts("Usage: jslint [--config=CONFIG_FILE] file.js [more inputs...]");
     process.exit(1);
 }
 
