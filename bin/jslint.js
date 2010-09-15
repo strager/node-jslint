@@ -48,7 +48,7 @@ function getConfig(args) {
 	try {
 	    return JSON.parse(fs.readFileSync(path, "utf8"));
 	} catch (e) {
-	    sys.puts("jslint: failed to read config file " + path + ": " + e.message);
+	    sys.puts("jslint: failed to read config file " + path + ": " + (e.message || e));
 	    process.exit(1);
 	}
     }
