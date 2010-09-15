@@ -122,8 +122,7 @@ files.forEach(function(file) {
         for (i=0; i<len; i++) {
             e = jslint.errors[i];
             if (e) {
-                sys.puts(file + ":" + (e.line + 1) + ":" + (e.character + 1) + ":" + e.reason);
-                sys.puts("    " + (e.evidence || "").replace(/^\s+|\s+$/, ""));
+                sys.puts(file + ":" + e.line + ":" + e.character + ":" + e.reason);
             }
         }
     }
